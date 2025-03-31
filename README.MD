@@ -1,6 +1,6 @@
 ## ✅ README.md — go - react learning project
 
-### 🚀 K400 Server - README
+
 ---
 
 ## 📌 Table of Contents
