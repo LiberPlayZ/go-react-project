@@ -9,7 +9,7 @@ import (
 	"sync"
 	"time"
 
-	_ "github.com/lib/pq" // Import the PostgreSQL driver
+	_ "github.com/lib/pq" 
 )
 
 type AdminInformation struct {

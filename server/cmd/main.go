@@ -8,7 +8,13 @@ import (
 func main() {
 	log.Println("Starting connecting to db")
 
-	loaders.ConnectToDb()
+	db, err := loaders.ConnectToDb()
+
+	if err != nil {
+		log.Fatalf("❌ Could not connect to database: %v", err)
+	}
+	
+	defer db.Close()
 
 	log.Println("Db connected successfully")
 

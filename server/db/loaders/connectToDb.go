@@ -1,12 +1,13 @@
 package loaders
 
 import (
+	"database/sql"
 	"log"
 	"server/config"
-	migrations "server/db/migration"
+	"server/db/migrations"
 )
 
-func ConnectToDb() {
+func ConnectToDb() (*sql.DB, error) {
 	AppConfig, err := config.LoadConfig()
 
 	if err != nil {
@@ -28,7 +29,8 @@ func ConnectToDb() {
 		log.Fatalf("❌ failed to ensure environment: %v", err)
 	}
 
-	defer connection.Close()
 	log.Println("✅ Environment ensured successfully")
+
+	return connection, nil
 
 }
