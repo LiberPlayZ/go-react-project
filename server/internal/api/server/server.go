@@ -31,7 +31,7 @@ func NewServer() *fiber.App {
 	app := fiber.New()
 
 	// Register routes
-	routes.SetupRoutes(app)
+	routes.SetupRoutes(app, db)
 
 	// Start server
 	err = app.Listen(":" + strconv.Itoa(AppConfig.AppPort))
