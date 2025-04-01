@@ -9,4 +9,5 @@ type Config struct {
 	AppDbName       string
 	AppDbUser       string
 	AppDbPassword   string
+	AppPort         string
 }

@@ -7,12 +7,7 @@ import (
 	"server/db/migrations"
 )
 
-func ConnectToDb() (*sql.DB, error) {
-	AppConfig, err := config.LoadConfig()
-
-	if err != nil {
-		log.Fatalf("❌ Failed to load config for app, error : %v", err)
-	}
+func ConnectToDb(AppConfig *config.Config) (*sql.DB, error) {
 
 	dbAdminUser := migrations.AdminInformation{
 		Host:     AppConfig.DbHost,
@@ -22,6 +17,8 @@ func ConnectToDb() (*sql.DB, error) {
 		Database: AppConfig.DbAdminDatabase,
 	}
 
+	log.Println("Starting connecting to db")
+
 	connection, err := migrations.EnsureEnvironment(dbAdminUser, AppConfig.AppDbName,
 		AppConfig.AppDbUser, AppConfig.AppDbPassword, migrations.Tables)
 
@@ -30,6 +27,7 @@ func ConnectToDb() (*sql.DB, error) {
 	}
 
 	log.Println("✅ Environment ensured successfully")
+	log.Println("✅ Db connected successfully")
 
 	return connection, nil
 

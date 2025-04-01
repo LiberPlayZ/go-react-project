@@ -3,8 +3,8 @@ package config
 import (
 	"log"
 	"os"
+
 	"github.com/joho/godotenv"
-	
 )
 
 func LoadConfig() (*Config, error) {
@@ -12,7 +12,7 @@ func LoadConfig() (*Config, error) {
 
 	required := []string{
 		"DB_HOST", "DB_PORT", "DB_ADMIN_USER", "DB_ADMIN_PASSWORD", "DB_ADMIN_DATABASE",
-		"APP_DB_NAME", "APP_DB_USER", "APP_DB_PASSWORD",
+		"APP_DB_NAME", "APP_DB_USER", "APP_DB_PASSWORD", "APP_PORT",
 	}
 
 	err := godotenv.Load()
@@ -42,7 +42,11 @@ func LoadConfig() (*Config, error) {
 		AppDbName:       os.Getenv("APP_DB_NAME"),
 		AppDbUser:       os.Getenv("APP_DB_USER"),
 		AppDbPassword:   os.Getenv("APP_DB_PASSWORD"),
+		AppPort:         os.Getenv("APP_PORT"),
 	}
+
+	log.Println("config load successfully")
+
 	return AppConfig, nil
 
 }
