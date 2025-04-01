@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"log"
 	"server/config"
-	"server/db/migrations"
+	"server/internal/db/migrations"
 )
 
 func ConnectToDb(AppConfig *config.Config) (*sql.DB, error) {

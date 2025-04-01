@@ -33,6 +33,12 @@ func LoadConfig() (*Config, error) {
 
 	}
 
+	app_port, err := GetIntEnv(os.Getenv("APP_PORT"))
+	if err != nil {
+		log.Fatalf("❌ ENV DB_PORT must be a number: %v", err)
+
+	}
+
 	AppConfig = &Config{
 		DbHost:          os.Getenv("DB_HOST"),
 		DbPort:          port,
@@ -42,7 +48,7 @@ func LoadConfig() (*Config, error) {
 		AppDbName:       os.Getenv("APP_DB_NAME"),
 		AppDbUser:       os.Getenv("APP_DB_USER"),
 		AppDbPassword:   os.Getenv("APP_DB_PASSWORD"),
-		AppPort:         os.Getenv("APP_PORT"),
+		AppPort:         app_port,
 	}
 
 	log.Println("config load successfully")
