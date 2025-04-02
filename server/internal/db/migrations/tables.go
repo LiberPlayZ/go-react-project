@@ -14,7 +14,10 @@ var Tables = []string{
 
 	`CREATE TABLE IF NOT EXISTS todos (
 		id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-		name VARCHAR(50) UNIQUE NOT NULL,
-		completed BOOLEAN NOT NULL 
+		title VARCHAR(50) UNIQUE NOT NULL,
+		description VARCHAR(150)  NOT NULL,
+		completed BOOLEAN NOT NULL,
+		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+		updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 	);`,
 }
