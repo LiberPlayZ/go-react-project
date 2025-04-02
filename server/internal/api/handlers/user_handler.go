@@ -1,23 +1,25 @@
 package handlers
 
 import (
-	"server/internal/api/services"
+	"server/internal/db/repositories"
 	"server/internal/models"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type UserHandler struct {
-	UserService *services.UserService
+	UserRepo *repositories.UserRepository
 }
 
-func NewUserHandler(userService *services.UserService) *UserHandler {
-	return &UserHandler{UserService: userService}
+func NewUserHandler(userRepo *repositories.UserRepository) *UserHandler {
+	return &UserHandler{UserRepo: userRepo}
 }
 
 // GetUsers handles GET /users request
 func (h *UserHandler) GetUsers(c *fiber.Ctx) error {
-	users, err := h.UserService.GetUsers()
+	users, err := h.UserRepo.GetAllUsers()
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Failed to retrieve users",
@@ -44,7 +46,15 @@ func (h *UserHandler) CreateUser(c *fiber.Ctx) error {
 		})
 	}
 
-	if err := h.UserService.CreateUser(user); err != nil {
+	user.ID = uuid.New()
+
+	hashPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+	user.Password = string(hashPassword)
+
+	if err := h.UserRepo.CreateUser(user); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Failed to create user ",
 		})
@@ -55,8 +65,22 @@ func (h *UserHandler) CreateUser(c *fiber.Ctx) error {
 }
 
 // GetUser handles GET /users/:id request
-func GetUser(c *fiber.Ctx) error {
-	return c.JSON(fiber.Map{"message": "Get single user"})
+func (h *UserHandler) GetUserById(c *fiber.Ctx) error {
+	id := c.Params("id")
+
+	user, err := h.UserRepo.GetUserById(id)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to retrieve user",
+		})
+	}
+
+	if user == nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"error": "User not found",
+		})
+	}
+	return c.JSON(user)
 }
 
 // UpdateUser handles PUT /users/:id request
