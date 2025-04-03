@@ -1,4 +1,4 @@
-## ✅ README.md — go - react learning project
+# ✅ README.md — go - react learning project
 
 
 ---
@@ -89,7 +89,7 @@ By default, the server runs on:
 > More endpoints coming soon as `handlers/` and `routes/` are implemented.
 
 
-# React + TypeScript + Vite
+## React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
