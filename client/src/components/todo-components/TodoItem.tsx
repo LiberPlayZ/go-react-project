@@ -3,7 +3,8 @@ import { Badge, Box, Flex, Text } from "@chakra-ui/react";
 import { FaCheckCircle } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { useColorModeValue } from "@/components/ui/color-mode"
-const TodoItem = ({ todo }: { todo: any }) => {
+import { TodoModel } from "@/models/TodoModel";
+const TodoItem = ({ todo }: { todo: TodoModel }) => {
     return (
         <Flex gap={2} alignItems={"center"}>
             <Flex style={{ border: '1px solid ' }}
@@ -18,7 +19,7 @@ const TodoItem = ({ todo }: { todo: any }) => {
                         : useColorModeValue("yellow.400", "yellow.700")}
                     textDecoration={todo.completed ? "line-through" : "none"}
                 >
-                    {todo.body}
+                    {todo.title}
                 </Text>
                 {todo.completed && (
                     <Badge ml='1' colorScheme='green'>

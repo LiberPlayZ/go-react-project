@@ -10,7 +10,7 @@ function App() {
 
     <Stack h='100vh'>
       <Navbar />
-      <Container>
+      <Container maxW={"2xl"}>
         <TodoForm />
         <TodoList />
       </Container>

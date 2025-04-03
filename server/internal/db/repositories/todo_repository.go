@@ -40,3 +40,8 @@ func (r *TodoRepository) GetAllTodos() ([]models.Todo, error) {
 	}
 	return todos, nil
 }
+
+func (r *TodoRepository) CreateTodo(todo models.Todo) error {
+	_, err := r.DB.Exec(queries.CreateTodoQuery, todo.ID, todo.Title, "", false)
+	return err
+}

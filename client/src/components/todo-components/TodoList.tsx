@@ -41,7 +41,7 @@ const TodoList = () => {
             )}
 
             {!isLoading && todos.length > 0 && (
-                <Stack gap={3}>
+                <Stack gap={3} >
                     {todos.map((todo) => (
                         <TodoItem key={todo.id} todo={todo} />
                     ))}

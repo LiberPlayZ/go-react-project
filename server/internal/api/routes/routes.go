@@ -28,5 +28,6 @@ func SetupRoutes(app *fiber.App, db *sql.DB) {
 	// todos gateway
 
 	api.Get("/todos", todoHandler.GetTodos)
+	api.Post("/todos", todoHandler.CreateTodo)
 
 }
