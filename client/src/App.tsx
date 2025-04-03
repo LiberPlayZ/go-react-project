@@ -1,8 +1,6 @@
 import { Container, Stack } from '@chakra-ui/react'
-import './App.css'
 import Navbar from './components/NavBar'
-import TodoForm from './components/todo-components/TodoForm'
-import TodoList from './components/todo-components/TodoList'
+import TodoPage from './components/todo-components/TodoPage'
 
 function App() {
 
@@ -11,8 +9,7 @@ function App() {
     <Stack h='100vh'>
       <Navbar />
       <Container maxW={"2xl"}>
-        <TodoForm />
-        <TodoList />
+        <TodoPage></TodoPage>
       </Container>
     </Stack>
   )

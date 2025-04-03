@@ -40,7 +40,7 @@ func (h *TodoHandler) CreateTodo(c *fiber.Ctx) error {
 
 	// validate not null fields
 
-	if todo.Title == "" {
+	if todo.Title == "" || todo.Description == "" {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "Missing request fields",
 		})
@@ -48,12 +48,13 @@ func (h *TodoHandler) CreateTodo(c *fiber.Ctx) error {
 
 	todo.ID = uuid.New()
 
-	if err := h.TodoRepo.CreateTodo(todo); err != nil {
+	createdTodo, err := h.TodoRepo.CreateTodo(todo)
+	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Failed to create todo ",
 		})
 	}
-	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
-		"message": "todo created successfully",
-	})
+
+	return c.JSON(createdTodo)
+
 }

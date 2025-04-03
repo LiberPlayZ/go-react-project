@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"database/sql"
+	"log"
 	"server/internal/db/queries"
 	"server/internal/models"
 )
@@ -41,7 +42,19 @@ func (r *TodoRepository) GetAllTodos() ([]models.Todo, error) {
 	return todos, nil
 }
 
-func (r *TodoRepository) CreateTodo(todo models.Todo) error {
-	_, err := r.DB.Exec(queries.CreateTodoQuery, todo.ID, todo.Title, "", false)
-	return err
+func (r *TodoRepository) CreateTodo(todo models.Todo) (*models.Todo, error) {
+	var resultTodo models.Todo
+	err := r.DB.QueryRow(queries.CreateTodoQuery, todo.ID, todo.Title, todo.Description, false).Scan(
+		&resultTodo.ID,
+		&resultTodo.Title,
+		&resultTodo.Description,
+		&resultTodo.Completed,
+		&resultTodo.CreatedAt,
+		&resultTodo.UpdatedAt,
+	)
+	if err != nil {
+		log.Println("Error inserting a todo", err)
+		return nil, err
+	}
+	return &resultTodo, nil
 }
