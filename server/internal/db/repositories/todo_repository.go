@@ -58,3 +58,25 @@ func (r *TodoRepository) CreateTodo(todo models.Todo) (*models.Todo, error) {
 	}
 	return &resultTodo, nil
 }
+
+func (r *TodoRepository) UpdateTodoToCompleted(todoId string) error {
+
+	res, err := r.DB.Exec(queries.UpdateTodoToCompletedQuery, todoId)
+	if err != nil {
+		log.Println("Error updating todo:", err)
+		return err
+	}
+
+	// Check if any rows were affected
+	rowsAffected, err := res.RowsAffected()
+	if err != nil {
+		log.Println("Error getting affected rows:", err)
+		return err
+	}
+
+	if rowsAffected == 0 {
+		return sql.ErrNoRows
+	}
+
+	return nil
+}

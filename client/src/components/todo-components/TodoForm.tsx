@@ -21,7 +21,7 @@ const TodoForm = ({ onAddTodo }: { onAddTodo: (todo: TodoModel) => void }) => {
         const createdTodo = await createTodo(todoDto);
         setIsPending(false);
 
-        onAddTodo(createdTodo); // 👈 Update state in parent
+        onAddTodo(createdTodo); 
         setNewTodoTitle("");
     };
 
