@@ -6,11 +6,12 @@ import { useColorModeValue } from "@/components/ui/color-mode"
 import { TodoModel } from "@/models/TodoModel";
 import { useState } from "react";
 import { deleteTodo, updateTodoCompleted } from "@/services/todo_service";
-const TodoItem = ({ todo, onUpdateCompleted, onDelete }:
+const TodoItem = ({ todo, onUpdateCompleted, onDelete, onClick }:
     {
         todo: TodoModel;
         onUpdateCompleted: (todo: TodoModel) => void;
-        onDelete: (id: string) => void
+        onDelete: (id: string) => void;
+        onClick?: () => void
     }) => {
     const [isUpdatingCompleted, setIsUpdatingCompleted] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
@@ -24,9 +25,15 @@ const TodoItem = ({ todo, onUpdateCompleted, onDelete }:
         }
 
         setIsUpdatingCompleted(true)
-        await updateTodoCompleted(todo.id);
-        todo.completed = true;
-        onUpdateCompleted(todo)
+        const res = await updateTodoCompleted(todo.id);
+        if (res.error) {
+            alert(JSON.stringify(res.error))
+        }
+        else {
+            todo.completed = true;
+            onUpdateCompleted(todo)
+        }
+
         setIsUpdatingCompleted(false);
     };
 
@@ -34,14 +41,20 @@ const TodoItem = ({ todo, onUpdateCompleted, onDelete }:
         const confirmed = confirm("Are you sure you want to delete this todo?");
         if (!confirmed) return;
         setIsDeleting(true)
-        await deleteTodo(todo.id);
-        onDelete(todo.id)
+        const res = await deleteTodo(todo.id);
+        if (res.error) {
+            alert(JSON.stringify(res.error))
+        }
+        else {
+            onDelete(todo.id)
+        }
+
         setIsDeleting(false);
     };
 
     return (
-        <Flex gap={2} alignItems={"center"}>
-            <Flex style={{ border: '1px solid ' }}
+        <Flex gap={2} alignItems={"center"} cursor={"pointer"} >
+            <Flex style={{ border: '1px solid ' }} onClick={onClick}
                 flex={1}
                 alignItems={"center"}
                 p={2}

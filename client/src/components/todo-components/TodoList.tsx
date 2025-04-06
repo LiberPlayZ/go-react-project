@@ -6,10 +6,13 @@ const TodoList = ({
     todos,
     onUpdateCompleted,
     onDelete,
+    onTodoClick
 }: {
     todos: TodoModel[];
     onUpdateCompleted: (todo: TodoModel) => void;
     onDelete: (id: string) => void;
+    onTodoClick: (todo: TodoModel) => void; // 👈 include this
+
 }) => {
     return (
         <>
@@ -32,6 +35,7 @@ const TodoList = ({
                                 todo={todo}
                                 onUpdateCompleted={onUpdateCompleted}
                                 onDelete={onDelete}
+                                onClick={() => onTodoClick(todo)}
                             />
                         ))}
                     </Stack>
