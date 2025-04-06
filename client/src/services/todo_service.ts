@@ -51,3 +51,19 @@ export const updateTodoCompleted = async (todoId: string) => {
         return [];
     }
 };
+
+
+export const deleteTodo = async (todoId: string) => {
+    try {
+        const response = await fetch(API_URL + '/' + todoId, {
+            method: 'DELETE',
+        });
+        if (!response.ok) {
+            throw new Error("Failed to update todo");
+        }
+        return await response.json();
+    } catch (error) {
+        console.error("Error updating todo:", error);
+        return [];
+    }
+};

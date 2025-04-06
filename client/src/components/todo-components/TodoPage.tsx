@@ -22,6 +22,16 @@ const TodoPage = () => {
         setTodos((prevTodos) => [...prevTodos, newTodo]);
     };
 
+    const handleUpdateTodo = (updatedTodo: TodoModel) => {
+
+        todos.map((todo) => (todo.id === updatedTodo.id ? updatedTodo : todo))
+
+    };
+
+    const handleDeleteTodo = (id: string) => {
+        setTodos((prev) => prev.filter((todo) => todo.id !== id));
+    };
+
     return (
         <>
             <TodoForm onAddTodo={addTodo} />
@@ -33,7 +43,10 @@ const TodoPage = () => {
                     <Spinner size={"xl"} />
                 </Flex>
             ) : (
-                <TodoList todos={todos} />
+                <TodoList
+                    todos={todos}
+                    onUpdateCompleted={handleUpdateTodo}
+                    onDelete={handleDeleteTodo} />
             )}
         </>
     );

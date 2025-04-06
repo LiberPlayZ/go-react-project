@@ -2,13 +2,14 @@ import { Stack, Text } from "@chakra-ui/react";
 import TodoItem from "./TodoItem";
 import { TodoModel } from "@/models/TodoModel";
 
-const TodoList = ({ todos }: { todos: TodoModel[] }) => {
+const TodoList = ({ todos, onUpdateCompleted, onDelete }:
+    {
+        todos: TodoModel[];
+        onUpdateCompleted: (todo: TodoModel) => void;
+        onDelete: (id: string) => void
+    }) => {
 
-    const handleUpdateTodo = (updatedTodo: TodoModel) => {
 
-        todos.map((todo) => (todo.id === updatedTodo.id ? updatedTodo : todo))
-
-    };
     return (
         <>
             {todos.length === 0 ? (
@@ -20,7 +21,10 @@ const TodoList = ({ todos }: { todos: TodoModel[] }) => {
             ) : (
                 <Stack gap={3}>
                     {todos.map((todo) => (
-                        <TodoItem key={todo.id} todo={todo} onUpdateCompleted={handleUpdateTodo} />
+                        <TodoItem key={todo.id}
+                            todo={todo}
+                            onUpdateCompleted={onUpdateCompleted}
+                            onDelete={onDelete} />
                     ))}
                 </Stack>
             )}
