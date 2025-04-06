@@ -19,9 +19,14 @@ const TodoForm = ({ onAddTodo }: { onAddTodo: (todo: TodoModel) => void }) => {
             description: "test",
         };
         const createdTodo = await createTodo(todoDto);
-        setIsPending(false);
+        if (createdTodo.error) {
+            alert(JSON.stringify(createdTodo.error))
+        }
+        else {
+            onAddTodo(createdTodo);
 
-        onAddTodo(createdTodo); 
+        }
+        setIsPending(false);
         setNewTodoTitle("");
     };
 

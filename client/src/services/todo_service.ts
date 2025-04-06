@@ -7,7 +7,8 @@ export const getTodos = async () => {
     try {
         const response = await fetch(API_URL);
         if (!response.ok) {
-            throw new Error("Failed to fetch todos");
+            const error = await response.json();
+            return { error: error };
         }
         return await response.json();
     } catch (error) {
@@ -19,6 +20,7 @@ export const getTodos = async () => {
 
 export const createTodo = async (todo: TodoDto) => {
     try {
+
         const response = await fetch(API_URL, {
             method: "POST",
             headers: {
@@ -27,12 +29,13 @@ export const createTodo = async (todo: TodoDto) => {
             body: JSON.stringify(todo)
         });
         if (!response.ok) {
-            throw new Error("Failed to create todo");
+            const error = await response.json();
+            return { error: error };
         }
         return await response.json();
-    } catch (error) {
+    } catch (error: any) {
         console.error("Error creating todo:", error);
-        return [];
+        return { error: error.message || "Something went wrong" };
     }
 };
 
@@ -43,12 +46,13 @@ export const updateTodoCompleted = async (todoId: string) => {
             method: 'PUT',
         });
         if (!response.ok) {
-            throw new Error("Failed to update todo");
+            const error = await response.json();
+            return { error: error };
         }
         return await response.json();
     } catch (error) {
         console.error("Error updating todo:", error);
-        return [];
+        return { error: "Something went wrong" };
     }
 };
 
@@ -59,11 +63,12 @@ export const deleteTodo = async (todoId: string) => {
             method: 'DELETE',
         });
         if (!response.ok) {
-            throw new Error("Failed to update todo");
+            const error = await response.json();
+            return { error: error };
         }
         return await response.json();
     } catch (error) {
         console.error("Error updating todo:", error);
-        return [];
+        return null;
     }
 };

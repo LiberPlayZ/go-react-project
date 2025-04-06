@@ -5,6 +5,9 @@ import (
 	"log"
 	"server/internal/db/repositories"
 	"server/internal/models"
+	"strings"
+
+	// "strings"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
@@ -51,6 +54,11 @@ func (h *TodoHandler) CreateTodo(c *fiber.Ctx) error {
 
 	createdTodo, err := h.TodoRepo.CreateTodo(todo)
 	if err != nil {
+		if strings.Contains(err.Error(), "duplicate") {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"error": "todo title already exist.",
+			})
+		}
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Failed to create todo ",
 		})
@@ -78,6 +86,28 @@ func (h *TodoHandler) UpdateTodoToCompleted(c *fiber.Ctx) error {
 
 	return c.JSON(fiber.Map{
 		"message": "Todo updated successfully",
+	})
+
+}
+
+func (h *TodoHandler) DeleteTodo(c *fiber.Ctx) error {
+
+	id := c.Params("id") // Get the todo ID from the URL parameter
+
+	err := h.TodoRepo.DeleteTodo(id)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+				"error": "Todo not found",
+			})
+		}
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to update todo",
+		})
+	}
+
+	return c.JSON(fiber.Map{
+		"message": "Todo deleted successfully",
 	})
 
 }

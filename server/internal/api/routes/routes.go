@@ -30,5 +30,6 @@ func SetupRoutes(app *fiber.App, db *sql.DB) {
 	api.Get("/todos", todoHandler.GetTodos)
 	api.Post("/todos", todoHandler.CreateTodo)
 	api.Put("/todos/:id", todoHandler.UpdateTodoToCompleted)
+	api.Delete("/todos/:id", todoHandler.DeleteTodo)
 
 }

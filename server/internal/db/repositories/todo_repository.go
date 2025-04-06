@@ -80,3 +80,25 @@ func (r *TodoRepository) UpdateTodoToCompleted(todoId string) error {
 
 	return nil
 }
+
+func (r *TodoRepository) DeleteTodo(todoId string) error {
+
+	res, err := r.DB.Exec(queries.DeleteTodoQuery, todoId)
+	if err != nil {
+		log.Println("Error deleting todo:", err)
+		return err
+	}
+
+	// Check if any rows were affected
+	rowsAffected, err := res.RowsAffected()
+	if err != nil {
+		log.Println("Error getting affected rows:", err)
+		return err
+	}
+
+	if rowsAffected == 0 {
+		return sql.ErrNoRows
+	}
+
+	return nil
+}

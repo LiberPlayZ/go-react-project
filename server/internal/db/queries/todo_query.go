@@ -9,3 +9,5 @@ var UpdateTodoToCompletedQuery = `UPDATE todos
 		SET completed = true , updated_at = Now()
 		WHERE id = $1;
 		`
+
+var DeleteTodoQuery = `DELETE FROM todos WHERE id = $1`
