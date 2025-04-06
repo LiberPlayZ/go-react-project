@@ -3,6 +3,12 @@ import TodoItem from "./TodoItem";
 import { TodoModel } from "@/models/TodoModel";
 
 const TodoList = ({ todos }: { todos: TodoModel[] }) => {
+
+    const handleUpdateTodo = (updatedTodo: TodoModel) => {
+
+        todos.map((todo) => (todo.id === updatedTodo.id ? updatedTodo : todo))
+
+    };
     return (
         <>
             {todos.length === 0 ? (
@@ -14,7 +20,7 @@ const TodoList = ({ todos }: { todos: TodoModel[] }) => {
             ) : (
                 <Stack gap={3}>
                     {todos.map((todo) => (
-                        <TodoItem key={todo.id} todo={todo} />
+                        <TodoItem key={todo.id} todo={todo} onUpdateCompleted={handleUpdateTodo} />
                     ))}
                 </Stack>
             )}

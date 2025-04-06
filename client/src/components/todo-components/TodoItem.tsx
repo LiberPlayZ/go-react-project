@@ -1,10 +1,40 @@
 
-import { Badge, Box, Flex, Text } from "@chakra-ui/react";
+import { Badge, Box, Flex, Spinner, Text } from "@chakra-ui/react";
 import { FaCheckCircle } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { useColorModeValue } from "@/components/ui/color-mode"
 import { TodoModel } from "@/models/TodoModel";
-const TodoItem = ({ todo }: { todo: TodoModel }) => {
+import { useState } from "react";
+import { updateTodoCompleted } from "@/services/todo_service";
+const TodoItem = ({ todo, onUpdateCompleted }:
+    { todo: TodoModel; onUpdateCompleted: (todo: TodoModel) => void }) => {
+    const [isUpdatingCompleted, setIsUpdatingCompleted] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+
+
+
+    const updateTodo = async () => {
+        if (todo.completed) {
+            alert("todo already completed.")
+            return;
+        }
+
+        setIsUpdatingCompleted(true)
+        await updateTodoCompleted(todo.id);
+        todo.completed = true;
+        onUpdateCompleted(todo)
+        setIsUpdatingCompleted(false);
+    };
+
+    const deleteTodo = async () => {
+
+        setIsUpdatingCompleted(true)
+        await updateTodoCompleted(todo.id);
+        todo.completed = true;
+        onUpdateCompleted(todo)
+        setIsUpdatingCompleted(false);
+    };
+
     return (
         <Flex gap={2} alignItems={"center"}>
             <Flex style={{ border: '1px solid ' }}
@@ -32,12 +62,16 @@ const TodoItem = ({ todo }: { todo: TodoModel }) => {
                     </Badge>
                 )}
             </Flex>
-            <Flex gap={2} alignItems={"center"}>
+            <Flex gap={2} alignItems={"center"} onClick={updateTodo}>
                 <Box color={"green.500"} cursor={"pointer"}>
-                    <FaCheckCircle size={20} />
+                    {!isUpdatingCompleted && <FaCheckCircle size={20} />}
+                    {isUpdatingCompleted && <Spinner size={"sm"} />}
+
                 </Box>
-                <Box color={"red.500"} cursor={"pointer"}>
-                    <MdDelete size={25} />
+                <Box color={"red.500"} cursor={"pointer"} onClick={deleteTodo}>
+                    {!isDeleting && <MdDelete size={25} />}
+                    {isDeleting && <Spinner size={"sm"} />}
+
                 </Box>
             </Flex>
         </Flex>
