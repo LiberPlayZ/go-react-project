@@ -6,6 +6,7 @@ import { getTodos } from "@/services/todo_service";
 import { TodoModel } from "@/models/TodoModel";
 import TodoInfoDialog from "./TodoInfoDialog";
 import Navbar from "../NavBar";
+import { useColorModeValue } from "../ui/color-mode";
 
 const TodoPage = () => {
     const [todos, setTodos] = useState<TodoModel[]>([]);
@@ -43,7 +44,7 @@ const TodoPage = () => {
 
     return (
         <>
-            <Stack h='100vh'>
+            <Stack h='100vh' bg={useColorModeValue("gray.50", "gray.800")}>
                 <Navbar />
                 <Container maxW={"2xl"}>
 
