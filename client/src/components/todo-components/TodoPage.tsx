@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { Flex, Spinner, Text, useDisclosure } from "@chakra-ui/react";
+import { Container, Flex, Spinner, Stack, Text, useDisclosure } from "@chakra-ui/react";
 import TodoForm from "./TodoForm";
 import TodoList from "./TodoList";
 import { getTodos } from "@/services/todo_service";
 import { TodoModel } from "@/models/TodoModel";
 import TodoInfoDialog from "./TodoInfoDialog";
+import Navbar from "../NavBar";
 
 const TodoPage = () => {
     const [todos, setTodos] = useState<TodoModel[]>([]);
@@ -42,25 +43,31 @@ const TodoPage = () => {
 
     return (
         <>
-            <TodoForm onAddTodo={addTodo} />
-            <Text fontSize={"4xl"} textTransform={"uppercase"} fontWeight={"bold"} textAlign={"center"} my={2}>
-                Today's Tasks
-            </Text>
-            {isLoading ? (
-                <Flex justifyContent={"center"} my={4}>
-                    <Spinner size={"xl"} />
-                </Flex>
-            ) : (
-                <TodoList
-                    todos={todos}
-                    onUpdateCompleted={handleUpdateTodo}
-                    onDelete={handleDeleteTodo}
-                    onTodoClick={handleTodoClick} />
-            )}
-            <TodoInfoDialog
-                isOpen={open}
-                onClose={onClose}
-                todo={selectedTodo} />
+            <Stack h='100vh'>
+                <Navbar />
+                <Container maxW={"2xl"}>
+
+                    <TodoForm onAddTodo={addTodo} />
+                    <Text fontSize={"4xl"} textTransform={"uppercase"} fontWeight={"bold"} textAlign={"center"} my={2}>
+                        Today's Tasks
+                    </Text>
+                    {isLoading ? (
+                        <Flex justifyContent={"center"} my={4}>
+                            <Spinner size={"xl"} />
+                        </Flex>
+                    ) : (
+                        <TodoList
+                            todos={todos}
+                            onUpdateCompleted={handleUpdateTodo}
+                            onDelete={handleDeleteTodo}
+                            onTodoClick={handleTodoClick} />
+                    )}
+                    <TodoInfoDialog
+                        isOpen={open}
+                        onClose={onClose}
+                        todo={selectedTodo} />
+                </Container>
+            </Stack>
         </>
     );
 };

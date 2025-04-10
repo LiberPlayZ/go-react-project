@@ -54,7 +54,7 @@ const TodoItem = ({ todo, onUpdateCompleted, onDelete, onClick }:
 
     return (
         <Flex gap={2} alignItems={"center"} cursor={"pointer"} >
-            <Flex style={{ border: '1px solid ' }} onClick={onClick}
+            <Flex style={{ border: '1px solid ', cursor: 'pointer' }} onClick={onClick}
                 flex={1}
                 alignItems={"center"}
                 p={2}
