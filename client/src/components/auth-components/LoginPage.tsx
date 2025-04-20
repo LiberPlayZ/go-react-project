@@ -11,34 +11,34 @@ import Navbar from "../NavBar";
 import { useColorModeValue } from "../ui/color-mode";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
+import { login } from "@/services/user_service";
+import { UserDto } from "@/dtos/UserDto";
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
     const { register, handleSubmit } = useForm();
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+
     const onLogin = async (data: any) => {
         const formValues: { email: string, password: string } = data;
-        console.log(formValues);
+
+        if (formValues.email.trim() == "" || formValues.password == "") {
+            alert("empty inputs");
+            return;
+        }
         setLoading(true);
+        const user = await login(formValues as UserDto);
+        setLoading(false);
+        if (user.error) {
+            alert(JSON.stringify(user.error))
+            return;
+        }
+        navigate('/todos')
 
 
 
-        // if (!newTodoTitle.trim()) return;
 
-        // setIsPending(true);
-        // const todoDto: TodoDto = {
-        //     title: newTodoTitle,
-        //     description: "test",
-        // };
-        // const createdTodo = await createTodo(todoDto);
-        // if (createdTodo.error) {
-        //     alert(JSON.stringify(createdTodo.error))
-        // }
-        // else {
-        //     onAddTodo(createdTodo);
-
-        // }
-        // setIsPending(false);
-        // setNewTodoTitle("");
     };
 
     return (

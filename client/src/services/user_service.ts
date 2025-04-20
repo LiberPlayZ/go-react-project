@@ -7,8 +7,8 @@ const API_URL = import.meta.env.VITE_API_URL + '/users';
 
 export const login = async (user: UserDto) => {
     try {
-
-        const response = await fetch(API_URL, {
+        const url = API_URL + '/login';
+        const response = await fetch(url, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -17,7 +17,7 @@ export const login = async (user: UserDto) => {
         });
         if (!response.ok) {
             const error = await response.json();
-            return { error: error };
+            return error;
         }
         return await response.json();
     } catch (error: any) {

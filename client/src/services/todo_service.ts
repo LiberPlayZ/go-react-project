@@ -8,7 +8,7 @@ export const getTodos = async () => {
         const response = await fetch(API_URL);
         if (!response.ok) {
             const error = await response.json();
-            return { error: error };
+            return error;
         }
         return await response.json();
     } catch (error) {
@@ -30,7 +30,7 @@ export const createTodo = async (todo: TodoDto) => {
         });
         if (!response.ok) {
             const error = await response.json();
-            return { error: error };
+            return error;
         }
         return await response.json();
     } catch (error: any) {
@@ -47,7 +47,7 @@ export const updateTodoCompleted = async (todoId: string) => {
         });
         if (!response.ok) {
             const error = await response.json();
-            return { error: error };
+            return error;
         }
         return await response.json();
     } catch (error) {
@@ -64,7 +64,7 @@ export const deleteTodo = async (todoId: string) => {
         });
         if (!response.ok) {
             const error = await response.json();
-            return { error: error };
+            return error;
         }
         return await response.json();
     } catch (error) {
