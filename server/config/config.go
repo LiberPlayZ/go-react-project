@@ -10,4 +10,5 @@ type Config struct {
 	AppDbUser       string
 	AppDbPassword   string
 	AppPort         int
+	HashingCost     int
 }

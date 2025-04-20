@@ -39,6 +39,12 @@ func LoadConfig() (*Config, error) {
 
 	}
 
+	hashCost, err := GetIntEnv(os.Getenv("HASHING_COST"))
+	if err != nil {
+		log.Fatalf("❌ ENV DB_PORT must be a number: %v", err)
+
+	}
+
 	AppConfig = &Config{
 		DbHost:          os.Getenv("DB_HOST"),
 		DbPort:          port,
@@ -49,6 +55,7 @@ func LoadConfig() (*Config, error) {
 		AppDbUser:       os.Getenv("APP_DB_USER"),
 		AppDbPassword:   os.Getenv("APP_DB_PASSWORD"),
 		AppPort:         app_port,
+		HashingCost:     hashCost,
 	}
 
 	log.Println("config load successfully")

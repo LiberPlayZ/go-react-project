@@ -3,15 +3,17 @@ package routes
 import (
 	"database/sql"
 	"server/internal/api/handlers"
+	"server/internal/auth"
 	"server/internal/db/repositories"
 
 	"github.com/gofiber/fiber/v2"
 )
 
 // SetupRoutes registers all API routes
-func SetupRoutes(app *fiber.App, db *sql.DB) {
+func SetupRoutes(app *fiber.App, db *sql.DB, hashingCost int) {
 	userRepo := repositories.NewUserRepository(db)
-	userHandler := handlers.NewUserHandler(userRepo)
+	hashing := auth.NewHashing(hashingCost)
+	userHandler := handlers.NewUserHandler(userRepo, hashing)
 
 	todoRepo := repositories.NewTodoRepository(db)
 	todoHandler := handlers.NewTodoHandler(todoRepo)
@@ -22,6 +24,7 @@ func SetupRoutes(app *fiber.App, db *sql.DB) {
 	api.Get("/users", userHandler.GetUsers)
 	api.Post("/users", userHandler.CreateUser)
 	api.Get("/users/:id", userHandler.GetUserById) // <-- New route
+	api.Post("/users/login", userHandler.Login)
 	// api.Put("/users/:id", handlers.UpdateUser)
 	// api.Delete("/users/:id", handlers.DeleteUser)
 

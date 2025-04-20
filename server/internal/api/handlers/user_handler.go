@@ -1,20 +1,22 @@
 package handlers
 
 import (
+	"server/internal/auth"
 	"server/internal/db/repositories"
+	"server/internal/dtos"
 	"server/internal/models"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
-	"golang.org/x/crypto/bcrypt"
 )
 
 type UserHandler struct {
-	UserRepo *repositories.UserRepository
+	UserRepo       *repositories.UserRepository
+	HashingHandler *auth.Hashing
 }
 
-func NewUserHandler(userRepo *repositories.UserRepository) *UserHandler {
-	return &UserHandler{UserRepo: userRepo}
+func NewUserHandler(userRepo *repositories.UserRepository, hashing *auth.Hashing) *UserHandler {
+	return &UserHandler{UserRepo: userRepo, HashingHandler: hashing}
 }
 
 // GetUsers handles GET /users request
@@ -40,7 +42,7 @@ func (h *UserHandler) CreateUser(c *fiber.Ctx) error {
 
 	// validate not null fields
 
-	if user.Username == "" || user.Password == "" || user.Role == "" {
+	if user.Username == "" || user.Email == "" || user.Password == "" || user.Role == "" {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "Missing request fields",
 		})
@@ -48,7 +50,7 @@ func (h *UserHandler) CreateUser(c *fiber.Ctx) error {
 
 	user.ID = uuid.New()
 
-	hashPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+	hashPassword, err := h.HashingHandler.HashPassword(user.Password)
 	if err != nil {
 		return err
 	}
@@ -81,6 +83,47 @@ func (h *UserHandler) GetUserById(c *fiber.Ctx) error {
 		})
 	}
 	return c.JSON(user)
+}
+
+func (h *UserHandler) Login(c *fiber.Ctx) error {
+	var userLogin dtos.UserLoginDto
+
+	// check if request has body
+	if err := c.BodyParser(&userLogin); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Invalid request body",
+		})
+	}
+
+	//check if email and password are not null .
+	if userLogin.Email == "" || userLogin.Password == "" {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Missing request fields",
+		})
+	}
+
+	user, err := h.UserRepo.GetUserByEmail(userLogin.Email)
+
+	if err != nil {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"error": "Failed to retrieve user",
+		})
+
+	}
+
+	if user == nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"error": "User not found",
+		})
+	}
+	match := h.HashingHandler.VerifyPassword(userLogin.Password, user.Password)
+	if !match {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "password is invalid",
+		})
+	}
+	return c.JSON(user)
+
 }
 
 // UpdateUser handles PUT /users/:id request

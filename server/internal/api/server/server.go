@@ -36,9 +36,9 @@ func NewServer() *fiber.App {
 		AllowMethods: "GET,POST,PUT,DELETE,OPTIONS",
 		AllowHeaders: "Origin, Content-Type, Accept",
 	}))
-	
+
 	// Register routes
-	routes.SetupRoutes(app, db)
+	routes.SetupRoutes(app, db, AppConfig.HashingCost)
 
 	// Start server
 	err = app.Listen(":" + strconv.Itoa(AppConfig.AppPort))

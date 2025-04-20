@@ -28,6 +28,7 @@ func (r *UserRepository) GetAllUsers() ([]models.User, error) {
 		err := rows.Scan(
 			&user.ID,
 			&user.Username,
+			&user.Email,
 			&user.Password,
 			&user.Role,
 			&user.CreatedAt,
@@ -42,14 +43,30 @@ func (r *UserRepository) GetAllUsers() ([]models.User, error) {
 }
 
 func (r *UserRepository) CreateUser(user models.User) error {
-	_, err := r.DB.Exec(queries.CreateUserQuery, user.ID, user.Username, user.Password, user.Role)
+	_, err := r.DB.Exec(queries.CreateUserQuery, user.ID, user.Username, user.Email, user.Password, user.Role)
 	return err
 }
 
 func (r *UserRepository) GetUserById(id string) (*models.User, error) {
 	var user models.User
 	err := r.DB.QueryRow(queries.GetUserByIdQuery, id).Scan(
-		&user.ID, &user.Username, &user.Password, &user.Role, &user.CreatedAt, &user.UpdatedAt,
+		&user.ID, &user.Username, &user.Email, &user.Password, &user.Role, &user.CreatedAt, &user.UpdatedAt,
+	)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil // no user found
+		}
+		return nil, err
+	}
+
+	return &user, nil
+}
+
+func (r *UserRepository) GetUserByEmail(userEmail string) (*models.User, error) {
+	var user models.User
+	err := r.DB.QueryRow(queries.GetUserByEmailQuery, userEmail).Scan(
+		&user.ID, &user.Username, &user.Email, &user.Password, &user.Role, &user.CreatedAt, &user.UpdatedAt,
 	)
 
 	if err != nil {
