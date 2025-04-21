@@ -19,11 +19,14 @@ const TodoPage = () => {
 
     useEffect(() => {
         const fetchTodos = async () => {
-            const data = await getTodos() || [];
-            setTodos(data);
-            setIsLoading(false);
+            if (connectedUser) {
+                const data = await getTodos(connectedUser.id) || [];
+                setTodos(data);
+
+            }
         };
         fetchTodos();
+        setIsLoading(false);
     }, []);
 
     const addTodo = (newTodo: TodoDto) => {
@@ -47,11 +50,11 @@ const TodoPage = () => {
 
     return (
         <>
-            <Stack h='100vh' bg={useColorModeValue("gray.50", "gray.800")}>
+            <Stack h='100vh' bg={useColorModeValue("gray.50", "gray.900")}>
                 <Navbar />
                 <Container maxW={"2xl"}>
 
-                    <TodoForm onAddTodo={addTodo} />
+                    <TodoForm onAddTodo={addTodo} userId={connectedUser?.id || null} />
                     <Text fontSize={"4xl"} textTransform={"uppercase"} fontWeight={"bold"} textAlign={"center"} my={2}>
                         Today's Tasks
                     </Text>

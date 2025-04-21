@@ -13,7 +13,7 @@ var UpdateTodoToCompletedQuery = `UPDATE todos
 var DeleteTodoQuery = `DELETE FROM todos WHERE id = $1`
 
 var GetUserTodosQuery = `
-SELECT todos.id, todos.title, todos.description, todos.completed, todos.created_at, todos.updated_at FROM users 
+SELECT todos.id, todos.title, todos.description, todos.completed,todos.userid, todos.created_at, todos.updated_at FROM users 
 JOIN todos ON todos.id = ANY(users.todos) WHERE users.id = $1
 `
 

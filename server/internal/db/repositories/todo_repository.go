@@ -31,7 +31,6 @@ func (r *TodoRepository) GetAllTodos(userId string) ([]models.Todo, error) {
 		Rows = rows
 
 	}
-
 	defer Rows.Close()
 
 	var todos []models.Todo

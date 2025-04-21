@@ -3,9 +3,9 @@ import { CreateTodoDto } from "@/dtos/todos/CreateTodoDto";
 const API_URL = import.meta.env.VITE_API_URL + '/todos';
 
 
-export const getTodos = async () => {
+export const getTodos = async (userId: string) => {
     try {
-        const response = await fetch(API_URL);
+        const response = await fetch(API_URL + '/' + userId);
         if (!response.ok) {
             const error = await response.json();
             return error;

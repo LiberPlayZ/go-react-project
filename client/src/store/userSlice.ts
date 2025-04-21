@@ -19,9 +19,14 @@ const userSlice = createSlice({
     reducers: {
         setUser(state, action: PayloadAction<UserDto>) {
             state.user = action.payload;
+        },
+        addTodoToUser(state, action: PayloadAction<string>) {
+            if (state.user) {
+                state.user.todos.push(action.payload);
+            }
         }
     }
 })
 
-export const { setUser } = userSlice.actions;
+export const { setUser, addTodoToUser } = userSlice.actions;
 export default userSlice.reducer;

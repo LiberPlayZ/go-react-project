@@ -46,7 +46,7 @@ const LoginPage = () => {
     };
 
     return (
-        <Flex direction="column" minH="100vh" bg={useColorModeValue("gray.50", "gray.800")}>
+        <Flex direction="column" minH="100vh" bg={useColorModeValue("gray.50", "gray.900")}>
             {/* Navbar at the top */}
             <Navbar />
 
@@ -55,7 +55,7 @@ const LoginPage = () => {
                 flex="1"
                 align="center"
                 justify="center"
-                bg={useColorModeValue("gray.50", "gray.800")}
+                bg={useColorModeValue("gray.50", "gray.900")}
             >
                 <Box
                     p={8}
