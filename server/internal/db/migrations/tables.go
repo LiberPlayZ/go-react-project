@@ -9,6 +9,7 @@ var Tables = []string{
 		email VARCHAR(50) UNIQUE NOT NULL,
 		password TEXT NOT NULL,
 		role VARCHAR(50) NOT NULL,
+		todos UUID[],
 		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 		updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 	);`,
@@ -18,6 +19,7 @@ var Tables = []string{
 		title VARCHAR(50) UNIQUE NOT NULL,
 		description VARCHAR(150)  NOT NULL,
 		completed BOOLEAN NOT NULL,
+		userid UUID NOT NULL,
 		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 		updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 	);`,

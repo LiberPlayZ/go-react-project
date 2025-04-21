@@ -4,6 +4,9 @@ import (
 	"database/sql"
 	"server/internal/db/queries"
 	"server/internal/models"
+
+	"github.com/google/uuid"
+	"github.com/lib/pq"
 )
 
 type UserRepository struct {
@@ -31,6 +34,7 @@ func (r *UserRepository) GetAllUsers() ([]models.User, error) {
 			&user.Email,
 			&user.Password,
 			&user.Role,
+			pq.Array(&user.Todos),
 			&user.CreatedAt,
 			&user.UpdatedAt,
 		)
@@ -43,14 +47,14 @@ func (r *UserRepository) GetAllUsers() ([]models.User, error) {
 }
 
 func (r *UserRepository) CreateUser(user models.User) error {
-	_, err := r.DB.Exec(queries.CreateUserQuery, user.ID, user.Username, user.Email, user.Password, user.Role)
+	_, err := r.DB.Exec(queries.CreateUserQuery, user.ID, user.Username, user.Email, user.Password, user.Role, pq.Array([]uuid.UUID{}))
 	return err
 }
 
 func (r *UserRepository) GetUserById(id string) (*models.User, error) {
 	var user models.User
 	err := r.DB.QueryRow(queries.GetUserByIdQuery, id).Scan(
-		&user.ID, &user.Username, &user.Email, &user.Password, &user.Role, &user.CreatedAt, &user.UpdatedAt,
+		&user.ID, &user.Username, &user.Email, &user.Password, &user.Role, &user.Todos, &user.CreatedAt, &user.UpdatedAt,
 	)
 
 	if err != nil {
@@ -66,7 +70,7 @@ func (r *UserRepository) GetUserById(id string) (*models.User, error) {
 func (r *UserRepository) GetUserByEmail(userEmail string) (*models.User, error) {
 	var user models.User
 	err := r.DB.QueryRow(queries.GetUserByEmailQuery, userEmail).Scan(
-		&user.ID, &user.Username, &user.Email, &user.Password, &user.Role, &user.CreatedAt, &user.UpdatedAt,
+		&user.ID, &user.Username, &user.Email, &user.Password, &user.Role, pq.Array(&user.Todos), &user.CreatedAt, &user.UpdatedAt,
 	)
 
 	if err != nil {

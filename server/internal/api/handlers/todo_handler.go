@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"database/sql"
-	"log"
 	"server/internal/db/repositories"
 	"server/internal/models"
 	"strings"
@@ -22,10 +21,10 @@ func NewTodoHandler(todoRepo *repositories.TodoRepository) *TodoHandler {
 }
 
 func (h *TodoHandler) GetTodos(c *fiber.Ctx) error {
+	id := c.Params("id") // Get the todo ID from the URL parameter
 
-	todos, err := h.TodoRepo.GetAllTodos()
+	todos, err := h.TodoRepo.GetAllTodos(id)
 	if err != nil {
-		log.Print(err)
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Failed to retrieve todos",
 		})
@@ -44,7 +43,7 @@ func (h *TodoHandler) CreateTodo(c *fiber.Ctx) error {
 
 	// validate not null fields
 
-	if todo.Title == "" || todo.Description == "" {
+	if todo.Title == "" || todo.Description == "" || todo.UserId == uuid.Nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "Missing request fields",
 		})

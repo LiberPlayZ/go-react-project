@@ -15,22 +15,34 @@ func NewTodoRepository(db *sql.DB) *TodoRepository {
 	return &TodoRepository{DB: db}
 }
 
-func (r *TodoRepository) GetAllTodos() ([]models.Todo, error) {
+func (r *TodoRepository) GetAllTodos(userId string) ([]models.Todo, error) {
+	var Rows *sql.Rows
+	if userId == "" {
+		rows, err := r.DB.Query(queries.GetAllTodosQuery)
+		if err != nil {
+			return nil, err
+		}
+		Rows = rows
+	} else {
+		rows, err := r.DB.Query(queries.GetUserTodosQuery, userId)
+		if err != nil {
+			return nil, err
+		}
+		Rows = rows
 
-	rows, err := r.DB.Query(queries.GetAllTodosQuery)
-	if err != nil {
-		return nil, err
 	}
-	defer rows.Close()
+
+	defer Rows.Close()
 
 	var todos []models.Todo
-	for rows.Next() {
+	for Rows.Next() {
 		var todo models.Todo
-		err := rows.Scan(
+		err := Rows.Scan(
 			&todo.ID,
 			&todo.Title,
 			&todo.Description,
 			&todo.Completed,
+			&todo.UserId,
 			&todo.CreatedAt,
 			&todo.UpdatedAt,
 		)
@@ -44,11 +56,12 @@ func (r *TodoRepository) GetAllTodos() ([]models.Todo, error) {
 
 func (r *TodoRepository) CreateTodo(todo models.Todo) (*models.Todo, error) {
 	var resultTodo models.Todo
-	err := r.DB.QueryRow(queries.CreateTodoQuery, todo.ID, todo.Title, todo.Description, false).Scan(
+	err := r.DB.QueryRow(queries.CreateTodoQuery, todo.ID, todo.Title, todo.Description, false, todo.UserId).Scan(
 		&resultTodo.ID,
 		&resultTodo.Title,
 		&resultTodo.Description,
 		&resultTodo.Completed,
+		&resultTodo.UserId,
 		&resultTodo.CreatedAt,
 		&resultTodo.UpdatedAt,
 	)
@@ -56,6 +69,12 @@ func (r *TodoRepository) CreateTodo(todo models.Todo) (*models.Todo, error) {
 		log.Println("Error inserting a todo", err)
 		return nil, err
 	}
+
+	_, err = r.DB.Exec(queries.AddTodoToUserQuery, todo.ID, todo.UserId)
+	if err != nil {
+		return nil, err
+	}
+
 	return &resultTodo, nil
 }
 
