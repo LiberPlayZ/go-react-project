@@ -1,7 +1,6 @@
 package handlers
 
 import (
-
 	"server/internal/auth"
 	"server/internal/db/repositories"
 	"server/internal/dtos"
@@ -106,7 +105,7 @@ func (h *UserHandler) Login(c *fiber.Ctx) error {
 	user, err := h.UserRepo.GetUserByEmail(userLogin.Email)
 
 	if err != nil {
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Failed to retrieve user",
 		})
 
@@ -119,11 +118,20 @@ func (h *UserHandler) Login(c *fiber.Ctx) error {
 	}
 	match := h.HashingHandler.VerifyPassword(userLogin.Password, user.Password)
 	if !match {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": "password is invalid",
 		})
 	}
-	return c.JSON(user)
+	var storeUser = dtos.StoreUserDto{
+		ID:        user.ID,
+		Username:  user.Username,
+		Email:     user.Email,
+		Role:      user.Role,
+		Todos:     user.Todos,
+		CreatedAt: user.CreatedAt,
+		UpdatedAt: user.UpdatedAt,
+	}
+	return c.JSON(storeUser)
 
 }
 

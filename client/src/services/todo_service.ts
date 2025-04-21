@@ -1,4 +1,4 @@
-import { TodoDto } from "@/dtos/TodoDto";
+import { CreateTodoDto } from "@/dtos/todos/CreateTodoDto";
 
 const API_URL = import.meta.env.VITE_API_URL + '/todos';
 
@@ -18,7 +18,7 @@ export const getTodos = async () => {
 };
 
 
-export const createTodo = async (todo: TodoDto) => {
+export const createTodo = async (todo: CreateTodoDto) => {
     try {
 
         const response = await fetch(API_URL, {

@@ -12,7 +12,7 @@ import {
     DialogBackdrop,
     CloseButton,
 } from "@chakra-ui/react";
-import { TodoModel } from "@/models/TodoModel";
+import { TodoDto } from "@/dtos/todos/TodoDto";
 
 const TodoInfoDialog = ({
     isOpen,
@@ -21,7 +21,7 @@ const TodoInfoDialog = ({
 }: {
     isOpen: boolean;
     onClose: () => void;
-    todo: TodoModel | null;
+    todo: TodoDto | null;
 }) => {
     if (!todo) return null;
 

@@ -12,13 +12,16 @@ import { useColorModeValue } from "../ui/color-mode";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { login } from "@/services/user_service";
-import { UserDto } from "@/dtos/UserDto";
+import { LoginUserDto } from "@/dtos/users/LoginUserDto";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "@/store/hooks";
+import { setUser } from "@/store/userSlice";
 
 const LoginPage = () => {
     const { register, handleSubmit } = useForm();
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
 
     const onLogin = async (data: any) => {
         const formValues: { email: string, password: string } = data;
@@ -28,13 +31,14 @@ const LoginPage = () => {
             return;
         }
         setLoading(true);
-        const user = await login(formValues as UserDto);
+        const user = await login(formValues as LoginUserDto);
         setLoading(false);
         if (user.error) {
             alert(JSON.stringify(user.error))
             return;
         }
-        navigate('/todos')
+        dispatch(setUser(user));
+        navigate('/todos');
 
 
 

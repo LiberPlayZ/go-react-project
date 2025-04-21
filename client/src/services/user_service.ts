@@ -1,11 +1,11 @@
-import { UserDto } from "@/dtos/UserDto";
+import { LoginUserDto } from "@/dtos/users/LoginUserDto";
 
 
 const API_URL = import.meta.env.VITE_API_URL + '/users';
 
 
 
-export const login = async (user: UserDto) => {
+export const login = async (user: LoginUserDto) => {
     try {
         const url = API_URL + '/login';
         const response = await fetch(url, {

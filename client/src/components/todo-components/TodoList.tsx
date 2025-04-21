@@ -1,6 +1,6 @@
 import { Stack, Text, Box } from "@chakra-ui/react";
 import TodoItem from "./TodoItem";
-import { TodoModel } from "@/models/TodoModel";
+import { TodoDto } from "@/dtos/todos/TodoDto";
 
 const TodoList = ({
     todos,
@@ -8,10 +8,10 @@ const TodoList = ({
     onDelete,
     onTodoClick
 }: {
-    todos: TodoModel[];
-    onUpdateCompleted: (todo: TodoModel) => void;
+    todos: TodoDto[];
+    onUpdateCompleted: (todo: TodoDto) => void;
     onDelete: (id: string) => void;
-    onTodoClick: (todo: TodoModel) => void; // 👈 include this
+    onTodoClick: (todo: TodoDto) => void; // 👈 include this
 
 }) => {
     return (

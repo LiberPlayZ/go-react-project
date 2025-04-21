@@ -3,16 +3,19 @@ import { Container, Flex, Spinner, Stack, Text, useDisclosure } from "@chakra-ui
 import TodoForm from "./TodoForm";
 import TodoList from "./TodoList";
 import { getTodos } from "@/services/todo_service";
-import { TodoModel } from "@/models/TodoModel";
+import { TodoDto } from "@/dtos/todos/TodoDto";
 import TodoInfoDialog from "./TodoInfoDialog";
 import Navbar from "../NavBar";
 import { useColorModeValue } from "../ui/color-mode";
+import { useAppSelector } from "@/store/hooks";
+import { UserDto } from "@/dtos/users/UserDto";
 
 const TodoPage = () => {
-    const [todos, setTodos] = useState<TodoModel[]>([]);
+    const [todos, setTodos] = useState<TodoDto[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const { open, onOpen, onClose } = useDisclosure();
-    const [selectedTodo, setSelectedTodo] = useState<TodoModel | null>(null);
+    const [selectedTodo, setSelectedTodo] = useState<TodoDto | null>(null);
+    const connectedUser: UserDto | null = useAppSelector((state) => state.userState.user);
 
     useEffect(() => {
         const fetchTodos = async () => {
@@ -23,11 +26,11 @@ const TodoPage = () => {
         fetchTodos();
     }, []);
 
-    const addTodo = (newTodo: TodoModel) => {
+    const addTodo = (newTodo: TodoDto) => {
         setTodos((prevTodos) => [...prevTodos, newTodo]);
     };
 
-    const handleUpdateTodo = (updatedTodo: TodoModel) => {
+    const handleUpdateTodo = (updatedTodo: TodoDto) => {
 
         todos.map((todo) => (todo.id === updatedTodo.id ? updatedTodo : todo))
 
@@ -37,7 +40,7 @@ const TodoPage = () => {
         setTodos((prev) => prev.filter((todo) => todo.id !== id));
     };
 
-    const handleTodoClick = (todo: TodoModel) => {
+    const handleTodoClick = (todo: TodoDto) => {
         setSelectedTodo(todo);
         onOpen();
     };

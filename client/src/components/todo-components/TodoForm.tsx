@@ -1,11 +1,11 @@
-import { TodoDto } from "@/dtos/TodoDto";
+import { CreateTodoDto } from "@/dtos/todos/CreateTodoDto";
 import { createTodo } from "@/services/todo_service";
 import { Button, Flex, Input, Spinner } from "@chakra-ui/react";
 import { useState } from "react";
 import { IoMdAdd } from "react-icons/io";
-import { TodoModel } from "@/models/TodoModel";
+import { TodoDto } from "@/dtos/todos/TodoDto";
 
-const TodoForm = ({ onAddTodo }: { onAddTodo: (todo: TodoModel) => void }) => {
+const TodoForm = ({ onAddTodo }: { onAddTodo: (todo: TodoDto) => void }) => {
     const [newTodoTitle, setNewTodoTitle] = useState("");
     const [isPending, setIsPending] = useState(false);
 
@@ -14,7 +14,7 @@ const TodoForm = ({ onAddTodo }: { onAddTodo: (todo: TodoModel) => void }) => {
         if (!newTodoTitle.trim()) return;
 
         setIsPending(true);
-        const todoDto: TodoDto = {
+        const todoDto: CreateTodoDto = {
             title: newTodoTitle,
             description: "test",
         };

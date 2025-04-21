@@ -3,13 +3,13 @@ import { Badge, Box, Flex, Spinner, Text } from "@chakra-ui/react";
 import { FaCheckCircle } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { useColorModeValue } from "@/components/ui/color-mode"
-import { TodoModel } from "@/models/TodoModel";
+import { TodoDto } from "@/dtos/todos/TodoDto";
 import { useState } from "react";
 import { deleteTodo, updateTodoCompleted } from "@/services/todo_service";
 const TodoItem = ({ todo, onUpdateCompleted, onDelete, onClick }:
     {
-        todo: TodoModel;
-        onUpdateCompleted: (todo: TodoModel) => void;
+        todo: TodoDto;
+        onUpdateCompleted: (todo: TodoDto) => void;
         onDelete: (id: string) => void;
         onClick?: () => void
     }) => {
