@@ -1,4 +1,4 @@
-import { LoginUserDto } from "@/dtos/users/LoginUserDto";
+import { LoginUserDto } from "@/types/dtos/users/LoginUserDto";
 
 
 const API_URL = import.meta.env.VITE_API_URL + '/users';

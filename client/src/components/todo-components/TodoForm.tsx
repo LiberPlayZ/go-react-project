@@ -1,11 +1,13 @@
-import { CreateTodoDto } from "@/dtos/todos/CreateTodoDto";
+import { CreateTodoDto } from "@/types/dtos/todos/CreateTodoDto";
 import { createTodo } from "@/services/todo_service";
 import { Button, Flex, Input, Spinner } from "@chakra-ui/react";
 import { useState } from "react";
 import { IoMdAdd } from "react-icons/io";
-import { TodoDto } from "@/dtos/todos/TodoDto";
+import { TodoDto } from "@/types/dtos/todos/TodoDto";
 import { useAppDispatch } from "@/store/hooks";
 import { addTodoToUser } from "@/store/userSlice";
+import { createToast } from "../ui/toasterHandler";
+import { ToastType } from "@/types/enums/toastTypeEnum";
 
 const TodoForm = ({ onAddTodo, userId }:
     {
@@ -19,7 +21,7 @@ const TodoForm = ({ onAddTodo, userId }:
         e.preventDefault();
         if (!newTodoTitle.trim()) return;
         if (!userId || !userId.trim()) {
-            alert("pls log in to see todos.")
+            createToast("pls log in to see todos");
             return;
         }
 
@@ -31,7 +33,7 @@ const TodoForm = ({ onAddTodo, userId }:
         };
         const createdTodo = await createTodo(todoDto);
         if (createdTodo.error) {
-            alert(JSON.stringify(createdTodo.error))
+            createToast("error", JSON.stringify(createdTodo.error), ToastType.Error);
         }
         else {
             onAddTodo(createdTodo);

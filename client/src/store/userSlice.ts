@@ -1,4 +1,4 @@
-import { UserDto } from "@/dtos/users/UserDto";
+import { UserDto } from "@/types/dtos/users/UserDto";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 

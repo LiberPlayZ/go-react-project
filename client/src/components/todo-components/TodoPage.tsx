@@ -3,12 +3,12 @@ import { Container, Flex, Spinner, Stack, Text, useDisclosure } from "@chakra-ui
 import TodoForm from "./TodoForm";
 import TodoList from "./TodoList";
 import { getTodos } from "@/services/todo_service";
-import { TodoDto } from "@/dtos/todos/TodoDto";
+import { TodoDto } from "@/types/dtos/todos/TodoDto";
 import TodoInfoDialog from "./TodoInfoDialog";
 import Navbar from "../ui/NavBar";
 import { useColorModeValue } from "../ui/color-mode";
 import { useAppSelector } from "@/store/hooks";
-import { UserDto } from "@/dtos/users/UserDto";
+import { UserDto } from "@/types/dtos/users/UserDto";
 import UserInfoDialog from "../auth-components/UserInfoDialog";
 import { useNavigate } from "react-router-dom";
 

@@ -1,4 +1,4 @@
-import { CreateTodoDto } from "@/dtos/todos/CreateTodoDto";
+import { CreateTodoDto } from "@/types/dtos/todos/CreateTodoDto";
 
 const API_URL = import.meta.env.VITE_API_URL + '/todos';
 

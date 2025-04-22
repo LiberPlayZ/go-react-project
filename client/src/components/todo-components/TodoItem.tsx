@@ -3,9 +3,11 @@ import { Badge, Box, Flex, Spinner, Text } from "@chakra-ui/react";
 import { FaCheckCircle } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { useColorModeValue } from "@/components/ui/color-mode"
-import { TodoDto } from "@/dtos/todos/TodoDto";
+import { TodoDto } from "@/types/dtos/todos/TodoDto";
 import { useState } from "react";
 import { deleteTodo, updateTodoCompleted } from "@/services/todo_service";
+import { ToastType } from "@/types/enums/toastTypeEnum";
+import { createToast } from "../ui/toasterHandler";
 const TodoItem = ({ todo, onUpdateCompleted, onDelete, onClick }:
     {
         todo: TodoDto;
@@ -20,14 +22,15 @@ const TodoItem = ({ todo, onUpdateCompleted, onDelete, onClick }:
 
     const updateTodo = async () => {
         if (todo.completed) {
-            alert("todo already completed.")
+            createToast("todo already completed");
             return;
         }
 
         setIsUpdatingCompleted(true)
         const res = await updateTodoCompleted(todo.id);
         if (res.error) {
-            alert(JSON.stringify(res.error))
+            createToast("error", JSON.stringify(res.error), ToastType.Error);
+
         }
         else {
             todo.completed = true;
@@ -43,7 +46,7 @@ const TodoItem = ({ todo, onUpdateCompleted, onDelete, onClick }:
         setIsDeleting(true)
         const res = await deleteTodo(todo.id);
         if (res.error) {
-            alert(JSON.stringify(res.error))
+            createToast("error", JSON.stringify(res.error), ToastType.Error);
         }
         else {
             onDelete(todo.id)

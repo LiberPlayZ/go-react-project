@@ -12,10 +12,12 @@ import { useColorModeValue } from "../ui/color-mode";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { login } from "@/services/user_service";
-import { LoginUserDto } from "@/dtos/users/LoginUserDto";
+import { LoginUserDto } from "@/types/dtos/users/LoginUserDto";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "@/store/hooks";
 import { setUser } from "@/store/userSlice";
+import { createToast } from "../ui/toasterHandler";
+import { ToastType } from "@/types/enums/toastTypeEnum";
 
 const LoginPage = () => {
     const { register, handleSubmit } = useForm();
@@ -27,14 +29,14 @@ const LoginPage = () => {
         const formValues: { email: string, password: string } = data;
 
         if (formValues.email.trim() == "" || formValues.password == "") {
-            alert("empty inputs");
+            createToast("warning", "pls make sure all inputs are not empty", ToastType.Warning);
             return;
         }
         setLoading(true);
         const user = await login(formValues as LoginUserDto);
         setLoading(false);
         if (user.error) {
-            alert(JSON.stringify(user.error))
+            createToast("error", JSON.stringify(user.error), ToastType.Error);
             return;
         }
         dispatch(setUser(user));

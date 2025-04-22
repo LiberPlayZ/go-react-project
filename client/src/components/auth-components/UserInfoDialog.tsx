@@ -1,5 +1,5 @@
 import { DataList } from "@chakra-ui/react";
-import { UserDto } from "@/dtos/users/UserDto";
+import { UserDto } from "@/types/dtos/users/UserDto";
 import GenericInfoDialog from "../ui/GenericDialog";
 
 

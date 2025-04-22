@@ -1,6 +1,6 @@
 import { Stack, Text, Box } from "@chakra-ui/react";
 import TodoItem from "./TodoItem";
-import { TodoDto } from "@/dtos/todos/TodoDto";
+import { TodoDto } from "@/types/dtos/todos/TodoDto";
 
 const TodoList = ({
     todos,

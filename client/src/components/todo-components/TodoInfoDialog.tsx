@@ -1,5 +1,5 @@
 import { Badge, DataList } from "@chakra-ui/react";
-import { TodoDto } from "@/dtos/todos/TodoDto";
+import { TodoDto } from "@/types/dtos/todos/TodoDto";
 import GenericInfoDialog from "../ui/GenericDialog";
 
 
