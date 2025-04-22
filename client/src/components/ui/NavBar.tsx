@@ -1,6 +1,7 @@
-import { Box, Flex, Text, Container } from "@chakra-ui/react";
+import { Box, Flex, Text, Container, IconButton } from "@chakra-ui/react";
 import { ColorModeButton, useColorModeValue } from "@/components/ui/color-mode"
-export default function Navbar() {
+import { FaRegUser } from "react-icons/fa";
+export default function Navbar({ onUserClick }: { onUserClick?: () => void }) {
 
 
     return (
@@ -14,7 +15,20 @@ export default function Navbar() {
                     display={{ base: "none", sm: "flex" }}
                 >
 
-                    <Text textStyle={"lg"}>Welecome to todo list project</Text>
+                    <IconButton
+                        onClick={onUserClick}
+                        variant="ghost"
+                        aria-label="Toggle color mode"
+                        size="sm"
+                        css={{
+                            _icon: {
+                                width: "5",
+                                height: "5",
+                            },
+                        }}
+                    >
+                        <FaRegUser />
+                    </IconButton>
 
 
                 </Flex>

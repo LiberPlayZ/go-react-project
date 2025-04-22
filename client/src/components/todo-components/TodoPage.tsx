@@ -5,17 +5,29 @@ import TodoList from "./TodoList";
 import { getTodos } from "@/services/todo_service";
 import { TodoDto } from "@/dtos/todos/TodoDto";
 import TodoInfoDialog from "./TodoInfoDialog";
-import Navbar from "../NavBar";
+import Navbar from "../ui/NavBar";
 import { useColorModeValue } from "../ui/color-mode";
 import { useAppSelector } from "@/store/hooks";
 import { UserDto } from "@/dtos/users/UserDto";
+import UserInfoDialog from "../auth-components/UserInfoDialog";
+import { useNavigate } from "react-router-dom";
 
 const TodoPage = () => {
     const [todos, setTodos] = useState<TodoDto[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const { open, onOpen, onClose } = useDisclosure();
+    const {
+        open: isTodoDialogOpen,
+        onOpen: onTodoDialogOpen,
+        onClose: onTodoDialogClose,
+    } = useDisclosure();
+    const {
+        open: isUserDialogOpen,
+        onOpen: onUserDialogOpen,
+        onClose: onUserDialogClose,
+    } = useDisclosure();
     const [selectedTodo, setSelectedTodo] = useState<TodoDto | null>(null);
     const connectedUser: UserDto | null = useAppSelector((state) => state.userState.user);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchTodos = async () => {
@@ -45,13 +57,21 @@ const TodoPage = () => {
 
     const handleTodoClick = (todo: TodoDto) => {
         setSelectedTodo(todo);
-        onOpen();
+        onTodoDialogOpen();
+    };
+
+    const handleUserInfoClick = () => {
+        if (!connectedUser) {
+            navigate('/login');
+            return;
+        }
+        onUserDialogOpen();
     };
 
     return (
         <>
             <Stack h='100vh' bg={useColorModeValue("gray.50", "gray.900")}>
-                <Navbar />
+                <Navbar onUserClick={handleUserInfoClick} />
                 <Container maxW={"2xl"}>
 
                     <TodoForm onAddTodo={addTodo} userId={connectedUser?.id || null} />
@@ -70,9 +90,15 @@ const TodoPage = () => {
                             onTodoClick={handleTodoClick} />
                     )}
                     <TodoInfoDialog
-                        isOpen={open}
-                        onClose={onClose}
+                        isOpen={isTodoDialogOpen}
+                        onClose={onTodoDialogClose}
                         todo={selectedTodo} />
+
+                    <UserInfoDialog
+                        isOpen={isUserDialogOpen}
+                        onClose={onUserDialogClose}
+                        user={connectedUser}
+                    ></UserInfoDialog>
                 </Container>
             </Stack>
         </>

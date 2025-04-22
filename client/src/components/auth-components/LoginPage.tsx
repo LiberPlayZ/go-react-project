@@ -7,7 +7,7 @@ import {
     Stack,
     Flex,
 } from "@chakra-ui/react";
-import Navbar from "../NavBar";
+import Navbar from "../ui/NavBar";
 import { useColorModeValue } from "../ui/color-mode";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
